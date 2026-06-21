@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Django To-Do List</title>
+    <style>
+        body { font-family: sans-serif; max-width: 500px; margin: 40px auto; padding: 20px; }
+        .task-item { display: flex; justify-content: space-between; padding: 10px; border-bottom: 1px solid #eee; }
+        .completed { text-decoration: line-through; color: gray; }
+        form { margin-bottom: 20px; }
+        input[type="text"] { width: 70%; padding: 8px; }
+        button { padding: 8px 12px; cursor: pointer; }
+    </style>
+</head>
+<body>
+
+    <h2>My To-Do List</h2>
+
+    <!-- Form to add tasks -->
+    <form method="POST" action="{% url 'task_add' %}">
+        {% csrf_token %}
+        <input type="text" name="title" placeholder="Add a new task..." required>
+        <button type="submit">Add Task</button>
+    </form>
+
+    <!-- Task iteration -->
+    <div>
+        {% for task in tasks %}
+            <div class="task-item">
+                <span class="{% if task.completed %}completed{% endif %}">
+                    {{ task.title }}
+                </span>
+                <div>
+                    <a href="{% url 'toggle_task' task.id %}">
+                        {% if task.completed %} Undo {% else %} Complete {% endif %}
+                    </a> | 
+                    <a href="{% url 'delete_task' task.id %}" style="color: red;">Delete</a>
+                </div>
+            </div>
+        {% empty %}
+            <p>No tasks yet! Add one above.</p>
+        {% endfor %}
+    </div>
+
+</body>
+</html>
