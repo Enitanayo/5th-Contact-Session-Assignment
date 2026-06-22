@@ -35,7 +35,12 @@
                     <a href="{% url 'toggle_task' task.id %}">
                         {% if task.completed %} Undo {% else %} Complete {% endif %}
                     </a> | 
-                    <a href="{% url 'delete_task' task.id %}" style="color: red;">Delete</a>
+                    <form action="{% url 'delete_task' task.id %}" method="post" style="display:inline;">
+                        {% csrf_token %}
+                       <button type="submit" style="background: none; border: none; color: #dc3545; text-decoration: underline; cursor: pointer; padding: 0; font: inherit;">
+                            Delete
+                        </button>
+                    </form>
                 </div>
             </div>
         {% empty %}
